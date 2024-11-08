@@ -5,7 +5,10 @@ import entities.SubTaskEntity;
 import entities.TaskEntity;
 import entities.TaskStatus;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class TaskManager {
@@ -94,6 +97,7 @@ public class TaskManager {
     public int createSubTask(SubTaskEntity subTask) {
         final int id = ++generatedId;
         subTask.setId(id);
+        subTask.setStatus(TaskStatus.NEW);
         subTasks.add(subTask);
         return id;
     }
@@ -138,14 +142,29 @@ public class TaskManager {
     }
 
     public void updateEpic(EpicEntity epic) {
-        boolean isEpicStatusDone = false;
+        if (epics.get(epic).isEmpty())  {
+            epic.setStatus(TaskStatus.NEW);
+            return;
+        }
+        int countDone = 0;
+        int countNew = 0;
         for (int i = 0; i < epic.getTasks().size(); i++) {
-            if (epic.getTasks().get(i).getStatus().equals(TaskStatus.DONE)) {
-                isEpicStatusDone = true;
-                break;
+            TaskStatus status = epic.getTasks().get(i).getStatus();
+
+            switch (status) {
+                case DONE:
+                    countDone++;
+                    break;
+                case NEW:
+                    countNew++;
+                    break;
+                default:
+                    break;
             }
         }
-        if (isEpicStatusDone) {
+        if (countNew == epic.getTasks().size()) {
+            epic.setStatus(TaskStatus.NEW);
+        } else if (countDone == epic.getTasks().size()) {
             epic.setStatus(TaskStatus.DONE);
         } else {
             epic.setStatus(TaskStatus.IN_PROGRESS);
@@ -187,25 +206,6 @@ public class TaskManager {
             }
         }
         return subTasksInternal;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TaskManager that = (TaskManager) o;
-        return Objects.equals(tasks, that.tasks)
-                && Objects.equals(subTasks, that.subTasks)
-                && Objects.equals(epics, that.epics);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 17;
-        result = 31 * result + (tasks != null ? tasks.hashCode() : 0);
-        result = 31 * result + (subTasks != null ? subTasks.hashCode() : 0);
-        result = 31 * result + (epics != null ? epics.hashCode() : 0);
-        return result;
     }
 
     @Override
