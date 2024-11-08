@@ -40,7 +40,7 @@ public class TaskEntity {
         this.description = description;
     }
 
-    public entities.TaskStatus getStatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
