@@ -5,44 +5,24 @@ import java.util.List;
 
 public class EpicEntity extends TaskEntity {
 
-    private int epicId;
-    private String epicName;
-    private TaskStatus epicStatus;
     private List<SubTaskEntity> tasks;
+    SubTaskEntity subTask;
 
-    public EpicEntity(int aepicId, String name, String description, TaskStatus status) {
-        super();
-        setEpicId(epicId++);
+    public EpicEntity(String name, String description) {
+        super.setName(name);
+        super.setDescription(description);
         tasks = new ArrayList<>();
     }
 
     public EpicEntity() {
     }
 
-    @Override
-    public int getEpicId() {
-        return epicId;
-    }
-
-    @Override
-    public void setEpicId(int epicId) {
-        this.epicId = epicId;
-    }
-
     public String getEpicName() {
-        return epicName;
+        return super.getName();
     }
 
     public void setEpicName(String epicName) {
-        this.epicName = epicName;
-    }
-
-    public TaskStatus getEpicStatus() {
-        return epicStatus;
-    }
-
-    public void setEpicStatus(TaskStatus epicStatus) {
-        this.epicStatus = epicStatus;
+        super.setName(epicName);
     }
 
     public List<SubTaskEntity> getTasks() {
@@ -51,5 +31,15 @@ public class EpicEntity extends TaskEntity {
 
     public void setTasks(List<SubTaskEntity> tasks) {
         this.tasks = tasks;
+    }
+
+    @Override
+    public int getId() {
+        return super.getId();
+    }
+
+    @Override
+    public void setId(int id) {
+        super.setId(id);
     }
 }

@@ -1,37 +1,27 @@
 package entities;
 
 public class TaskEntity {
-    private int taskId = 1;
-    private int epicId;
+    private int id = 0;
     private String name;
     private String description;
     private TaskStatus status;
 
-    public TaskEntity(int epicId, String name, String description, entities.TaskStatus status) {
-        setTaskId(taskId++);
-        this.epicId = epicId;
+    public TaskEntity(int id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
-        this.status = status;
+        this.status = TaskStatus.NEW;
     }
 
     public TaskEntity() {
     }
 
-    public int getTaskId() {
-        return taskId;
+    public int getId() {
+        return id;
     }
 
-    public void setTaskId(int taskId) {
-        this.taskId = taskId;
-    }
-
-    public int getEpicId() {
-        return epicId;
-    }
-
-    public void setEpicId(int epicId) {
-        this.epicId = epicId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -61,8 +51,7 @@ public class TaskEntity {
     @Override
     public String toString() {
         return "TaskEntity{" +
-                "taskId=" + taskId +
-                ", epicId=" + epicId +
+                "taskId=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
