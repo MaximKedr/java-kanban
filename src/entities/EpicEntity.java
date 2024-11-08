@@ -6,7 +6,6 @@ import java.util.List;
 public class EpicEntity extends TaskEntity {
 
     private List<SubTaskEntity> tasks;
-    SubTaskEntity subTask;
 
     public EpicEntity(String name, String description) {
         super.setName(name);
@@ -33,13 +32,4 @@ public class EpicEntity extends TaskEntity {
         this.tasks = tasks;
     }
 
-    @Override
-    public int getId() {
-        return super.getId();
-    }
-
-    @Override
-    public void setId(int id) {
-        super.setId(id);
-    }
 }
