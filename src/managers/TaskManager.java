@@ -172,7 +172,6 @@ public class TaskManager {
         epics.put(epic, epic.getTasks());
     }
 
-
     public void deleteTaskById(int id) {
         tasks.remove(id);
     }
@@ -218,4 +217,3 @@ public class TaskManager {
                 '}';
     }
 }
-
