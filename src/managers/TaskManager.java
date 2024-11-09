@@ -101,7 +101,6 @@ public class TaskManager {
         subTasks.add(subTask);
         return id;
     }
-
     public void createEpic(EpicEntity epic) {
         List<SubTaskEntity> subTasksInternal = new ArrayList<>(tasks.size());
         boolean isEpicStatusNew = true;
