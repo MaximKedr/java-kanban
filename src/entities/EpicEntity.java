@@ -5,31 +5,26 @@ import java.util.List;
 
 public class EpicEntity extends TaskEntity {
 
-    private List<SubTaskEntity> tasks;
 
-    public EpicEntity(String name, String description) {
-        super.setName(name);
-        super.setDescription(description);
-        tasks = new ArrayList<>();
+   public EpicEntity() {
     }
 
-    public EpicEntity() {
+    protected List<Integer> subtaskIds = new ArrayList<>();
+
+    public EpicEntity(int id, String name, String description) {
+        super(id, name, description);
     }
 
-    public String getEpicName() {
-        return super.getName();
+    public void addSubtaskId(int id) {
+        subtaskIds.add(id);
     }
-
-    public void setEpicName(String epicName) {
-        super.setName(epicName);
+    public List<Integer> getSubtaskIds() {
+        return subtaskIds;
     }
-
-    public List<SubTaskEntity> getTasks() {
-        return tasks;
+    public void cleanSubtaskIds() {
+        subtaskIds.clear();
     }
-
-    public void setTasks(List<SubTaskEntity> tasks) {
-        this.tasks = tasks;
+    public void removeSubtask(int id) {
+        subtaskIds.remove(Integer.valueOf(id));
     }
-
 }
