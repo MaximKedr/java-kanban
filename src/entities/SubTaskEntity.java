@@ -1,25 +1,33 @@
 package entities;
 
 public class SubTaskEntity extends TaskEntity {
-    private EpicEntity epic;
-//    private int epicId = epic.getId();
-
+    private int epicId;
+    private int subTaskHistoryCount;
 
     public SubTaskEntity(int id, int epicId, String name, String description) {
         super(id, name, description);
-        epic = new EpicEntity();
-        epic.setId(id);
+        this.epicId = epicId;
     }
 
-    public SubTaskEntity() {
-        epic = new EpicEntity();
+    public int getSubTaskHistoryCount() {
+        return subTaskHistoryCount;
+    }
+
+    public void incrementSubTaskHistoryCount() {
+        subTaskHistoryCount++;
     }
 
     public int getEpicId() {
-        return epic.getId();
+        return this.epicId;
     }
 
     public void setEpicId(int epicId) {
-        epic.setId(epicId);
+        this.epicId = epicId;
     }
 }
+
+
+
+
+
+

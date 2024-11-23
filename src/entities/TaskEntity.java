@@ -5,6 +5,7 @@ public class TaskEntity {
     private String name;
     private String description;
     private TaskStatus status;
+    private int taskHistoryCount;
 
     public TaskEntity(int id, String name, String description) {
         this.id = id;
@@ -46,6 +47,14 @@ public class TaskEntity {
 
     public void setStatus(TaskStatus status) {
         this.status = status;
+    }
+
+    public int getTaskHistoryCount() {
+        return taskHistoryCount;
+    }
+
+    public void incrementTaskHistoryCount() {
+        taskHistoryCount++;
     }
 
     @Override
