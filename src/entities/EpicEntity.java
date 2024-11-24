@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EpicEntity extends TaskEntity {
-    private int epicHistoryCount;
 
     public EpicEntity() {
     }
@@ -29,13 +28,5 @@ public class EpicEntity extends TaskEntity {
 
     public void removeSubtask(int id) {
         subtaskIds.remove(Integer.valueOf(id));
-    }
-
-    public int getEpicHistoryCount() {
-        return epicHistoryCount;
-    }
-
-    public void incrementEpicHistoryCount() {
-        epicHistoryCount++;
     }
 }

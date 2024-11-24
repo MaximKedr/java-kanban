@@ -9,7 +9,7 @@ import utils.Managers;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ManagerTest {
+public class ManagersTest {
 
     @Test
     public void getDefaultHistory(){

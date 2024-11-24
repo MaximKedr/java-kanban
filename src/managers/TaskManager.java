@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 public interface TaskManager {
-    List<TaskEntity> getTasks();
+    Map<Integer, TaskEntity> getTasks();
 
-    void setTasks(List<TaskEntity> tasks);
+    void setTasks(Map<Integer, TaskEntity> tasks);
 
-    List<SubTaskEntity> getSubTasks();
+    Map<Integer, SubTaskEntity> getSubTasks();
 
-    void setSubTasks(List<SubTaskEntity> subTasks);
+    void setSubTasks(Map<Integer, SubTaskEntity> subTasks);
 
     Map<EpicEntity, List<Integer>> getEpics();
 
@@ -50,7 +50,7 @@ public interface TaskManager {
 
     void deleteEpicById(int id);
 
-    List<SubTaskEntity> getSubTasksByEpicId(int id);
+    Map<Integer, SubTaskEntity> getSubTasksByEpicId(int id);
 
-    public List<TaskEntity> getHistory();
+    List<TaskEntity> getHistory();
 }

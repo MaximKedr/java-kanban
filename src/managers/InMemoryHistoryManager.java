@@ -1,7 +1,5 @@
 package managers;
 
-import entities.EpicEntity;
-import entities.SubTaskEntity;
 import entities.TaskEntity;
 
 import java.util.ArrayList;
@@ -11,19 +9,14 @@ public class InMemoryHistoryManager implements HistoryManager {
     private List<TaskEntity> viewedTasks = new ArrayList<>();
 
     @Override
-    public List<TaskEntity> add(TaskEntity task) {
-        while (viewedTasks.size() > 9) {
-            viewedTasks.removeFirst();
-        }
-        if (task.getClass() == TaskEntity.class) {
-            task.incrementTaskHistoryCount();
-        } else if (task.getClass() == EpicEntity.class) {
-            ((EpicEntity) task).incrementEpicHistoryCount();
-        } else if (task.getClass() == SubTaskEntity.class) {
-            ((SubTaskEntity) task).incrementSubTaskHistoryCount();
+    public void add(TaskEntity task) {
+        if (task == null){
+            return;
         }
         viewedTasks.add(task);
-        return viewedTasks;
+        while (viewedTasks.size() > 10) {
+            viewedTasks.removeFirst();
+        }
     }
 
     @Override

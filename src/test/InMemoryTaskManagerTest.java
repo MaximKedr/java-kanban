@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InMemoryTaskManagerTest {
     TaskManager taskManager = new InMemoryTaskManager();
@@ -22,7 +21,7 @@ public class InMemoryTaskManagerTest {
         TaskEntity task = new TaskEntity(
                 1, "task1", "description1");
         taskManager.createTask(task);
-        assertTrue(taskManager.getTasks().contains(task), "Task не создана");
+        assertEquals(task, taskManager.getTasks().get(task.getId()), "Task не создана");
     }
 
     @Test
@@ -62,7 +61,7 @@ public class InMemoryTaskManagerTest {
         SubTaskEntity subTask = new SubTaskEntity(1, epic.getId(), "subtask1", "description1");
         taskManager.createEpic(epic);
         taskManager.createSubTask(subTask);
-        assertTrue(taskManager.getSubTasks().contains(subTask), "Subtask не создана");
+        assertEquals(subTask,taskManager.getSubTasks().get(subTask.getId()), "Subtask не создана");
     }
 
     @Test
@@ -81,7 +80,7 @@ public class InMemoryTaskManagerTest {
         subTask.setDescription("description2");
         taskManager.updateSubTask(subTask);
         assertEquals("description2", taskManager.getSubTasks()
-                .get(subTask.getId()-1)
+                .get(subTask.getId())
                 .getDescription(), "Subtask не обновлена");
     }
 
@@ -91,7 +90,7 @@ public class InMemoryTaskManagerTest {
         SubTaskEntity subTask = new SubTaskEntity(1, epic.getId(), "subtask1", "description1");
         taskManager.createSubTask(subTask);
         taskManager.deleteSubTaskById(subTask.getId());
-        assertFalse(taskManager.getSubTasks().contains(subTask), "Subtask не удалена");
+        assertNull(taskManager.getSubTaskById(subTask.getId()), "Task не удалена");
 
     }
 
@@ -105,9 +104,9 @@ public class InMemoryTaskManagerTest {
         taskManager.createTask(task2);
         SubTaskEntity subTask1 = new SubTaskEntity(1, epic.getId(), "subtask1", "description1");
         SubTaskEntity subTask2 = new SubTaskEntity(2, epic.getId(), "subtask2", "description2");
+        taskManager.createEpic(epic);
         taskManager.createSubTask(subTask1);
         taskManager.createSubTask(subTask2);
-        taskManager.createEpic(epic);
         assertNotNull(taskManager.getEpicById(epic.getId()), "Epic не создан");
     }
 
@@ -120,9 +119,9 @@ public class InMemoryTaskManagerTest {
         taskManager.createTask(task2);
         SubTaskEntity subTask1 = new SubTaskEntity(1, epic.getId(), "subtask1", "description1");
         SubTaskEntity subTask2 = new SubTaskEntity(2, epic.getId(), "subtask2", "description2");
+        taskManager.createEpic(epic);
         taskManager.createSubTask(subTask1);
         taskManager.createSubTask(subTask2);
-        taskManager.createEpic(epic);
         assertNotNull(taskManager.getEpicById(epic.getId()), "Epic не найден");
     }
 
@@ -135,9 +134,9 @@ public class InMemoryTaskManagerTest {
         taskManager.createTask(task2);
         SubTaskEntity subTask1 = new SubTaskEntity(1, epic.getId(), "subtask1", "description1");
         SubTaskEntity subTask2 = new SubTaskEntity(2, epic.getId(), "subtask2", "description2");
+        taskManager.createEpic(epic);
         taskManager.createSubTask(subTask1);
         taskManager.createSubTask(subTask2);
-        taskManager.createEpic(epic);
         epic.setName("updateEpic1");
         taskManager.updateEpic(epic);
         assertEquals(epic.getName(), "updateEpic1");
@@ -152,10 +151,10 @@ public class InMemoryTaskManagerTest {
         taskManager.createTask(task2);
         SubTaskEntity subTask1 = new SubTaskEntity(1, epic.getId(), "subtask1", "description1");
         SubTaskEntity subTask2 = new SubTaskEntity(2, epic.getId(), "subtask2", "description2");
+        taskManager.createEpic(epic);
         taskManager.createSubTask(subTask1);
         taskManager.createSubTask(subTask2);
-        taskManager.createEpic(epic);
-        assertFalse(taskManager.getEpics().keySet().contains(epic.getId() - 1), "Epic не удален");
+        assertFalse(taskManager.getEpics().containsKey(epic.getId()), "Epic не удален");
     }
 
     //     ========================= HISTORY =========================
