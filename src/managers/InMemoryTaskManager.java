@@ -6,6 +6,7 @@ import entities.TaskEntity;
 import entities.TaskStatus;
 import utils.Managers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +34,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Map<Integer, TaskEntity> getTasks() {
-        return new HashMap(tasks);
+    public List<TaskEntity> getTasks() {
+        return new ArrayList<>(tasks.values());
     }
 
     @Override
-    public void setTasks(Map<Integer, TaskEntity> tasksTo) {
-        this.tasks = tasksTo;
+    public void setTasks(List<TaskEntity> tasks) {
+        Map<Integer, TaskEntity> newTasks = new HashMap<>();
+        for (TaskEntity task : tasks) {
+            newTasks.put(task.getId(), task);
+        }
+        this.tasks = newTasks;
     }
 
     @Override
@@ -86,24 +91,13 @@ public class InMemoryTaskManager implements TaskManager {
         this.subTaskId = subTaskId;
     }
 
+    // ========================= TASK  =========================
     @Override
-    public void deleteAllTasks() {
-        tasks.clear();
-    }
-
-    @Override
-    public void deleteAllSubTasks() {
-        for (int i = 0; i < epics.size(); i++) {
-            epics.get(i).clear();
-            updateTask(tasks.get(i));
-        }
-        subTasks.clear();
-    }
-
-    @Override
-    public void deleteAllEpics() {
-        subTasks.clear();
-        epics.clear();
+    public int createTask(TaskEntity task) {
+        final int id = ++taskId;
+        task.setId(id);
+        tasks.put(task.getId(), task);
+        return id;
     }
 
     @Override
@@ -114,31 +108,21 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public SubTaskEntity getSubTaskById(int id) {
-        SubTaskEntity subTask = subTasks.get(id);
-        historyManager.add(subTask);
-        return subTask;
-    }
-
-    @Override
-    public List<Integer> getEpicById(int id) {
-        for (EpicEntity epicEntity : epics.keySet()) {
-            if (epicEntity.getId() == id) {
-                historyManager.add(epicEntity);
-                return epics.get(epicEntity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public int createTask(TaskEntity task) {
-        final int id = ++taskId;
-        task.setId(id);
+    public void updateTask(TaskEntity task) {
         tasks.put(task.getId(), task);
-        return id;
     }
 
+    @Override
+    public void deleteTaskById(int id) {
+        tasks.remove(id);
+    }
+
+    @Override
+    public void deleteAllTasks() {
+        tasks.clear();
+    }
+
+    // ========================= SUBTASK  ======================
     @Override
     public int createSubTask(SubTaskEntity subTask) {
         final int id = ++subTaskId;
@@ -158,6 +142,53 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public SubTaskEntity getSubTaskById(int id) {
+        SubTaskEntity subTask = subTasks.get(id);
+        historyManager.add(subTask);
+        return subTask;
+    }
+
+    @Override
+    public Map<Integer, SubTaskEntity> getSubTasksByEpicId(int id) {
+        Map<Integer, SubTaskEntity> subTasksInternal = new HashMap<>();
+        List<Integer> subTasksIds;
+
+        for (EpicEntity epic : epics.keySet()) {
+            if (epic.getId() == id) {
+                subTasksIds = epics.get(epic);
+                for (Integer idSubTask : subTasksIds) {
+                    subTasksInternal.put(idSubTask, subTasks.get(idSubTask));
+                }
+            }
+        }
+        return subTasksInternal;
+    }
+
+    @Override
+    public void updateSubTask(SubTaskEntity subTask) {
+        subTasks.put(subTask.getId(), subTask);
+    }
+
+    @Override
+    public void deleteSubTaskById(int id) {
+        for (Integer idSubTask : subTasks.keySet()) {
+            if (idSubTask == id) {
+                subTasks.remove(idSubTask);
+            }
+        }
+    }
+
+    @Override
+    public void deleteAllSubTasks() {
+        for (int i = 0; i < epics.size(); i++) {
+            epics.get(i).clear();
+            updateTask(tasks.get(i));
+        }
+        subTasks.clear();
+    }
+
+    // ========================= EPIC  =========================
+    @Override
     public void createEpic(EpicEntity epic) {
         final int id = ++epicId;
         epic.setId(id);
@@ -175,13 +206,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(TaskEntity task) {
-        tasks.put(task.getId(), task);
-    }
-
-    @Override
-    public void updateSubTask(SubTaskEntity subTask) {
-        subTasks.put(subTask.getId(), subTask);
+    public List<Integer> getEpicById(int id) {
+        for (EpicEntity epicEntity : epics.keySet()) {
+            if (epicEntity.getId() == id) {
+                historyManager.add(epicEntity);
+                return epics.get(epicEntity);
+            }
+        }
+        return null;
     }
 
     @Override
@@ -217,20 +249,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteTaskById(int id) {
-        tasks.remove(id);
-    }
-
-    @Override
-    public void deleteSubTaskById(int id) {
-        for (Integer idSubTask : subTasks.keySet()) {
-            if (idSubTask == id) {
-                subTasks.remove(idSubTask);
-            }
-        }
-    }
-
-    @Override
     public void deleteEpicById(int id) {
         for (EpicEntity epic : epics.keySet()) {
             if (epic.getId() == id) {
@@ -241,19 +259,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Map<Integer, SubTaskEntity> getSubTasksByEpicId(int id) {
-        Map<Integer, SubTaskEntity> subTasksInternal = new HashMap<>();
-        List<Integer> subTasksIds;
-
-        for (EpicEntity epic : epics.keySet()) {
-            if (epic.getId() == id) {
-                subTasksIds = epics.get(epic);
-                for (Integer idSubTask : subTasksIds) {
-                    subTasksInternal.put(idSubTask, subTasks.get(idSubTask));
-                }
-            }
-        }
-        return subTasksInternal;
+    public void deleteAllEpics() {
+        subTasks.clear();
+        epics.clear();
     }
 
     @Override

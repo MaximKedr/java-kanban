@@ -21,7 +21,7 @@ public class InMemoryTaskManagerTest {
         TaskEntity task = new TaskEntity(
                 1, "task1", "description1");
         taskManager.createTask(task);
-        assertEquals(task, taskManager.getTasks().get(task.getId()), "Task не создана");
+        assertEquals(task, taskManager.getTasks().get(task.getId()-1), "Task не создана");
     }
 
     @Test
@@ -41,7 +41,7 @@ public class InMemoryTaskManagerTest {
         task.setDescription("description2");
         taskManager.updateTask(task);
         assertEquals("description2", taskManager.getTasks()
-                .get(task.getId())
+                .get(task.getId()-1)
                 .getDescription(), "Task не обновлена");
     }
 
